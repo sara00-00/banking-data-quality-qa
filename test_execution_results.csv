@@ -1,0 +1,13 @@
+﻿test_id,table_name,test_category,validation_rule,observed_result,status,notes_or_assumptions
+DQ-DB-001,database,Profiling,Count records in selected tables,customers: 12; accounts: 20; transactions: 1000; cards: 15; transfers: 50; bill_payments: 30; loans: 10; loan_payments: 50. Total across these tables: 1187.,PROFILE,Summary query only; not a pass/fail test.
+DQ-CUST-001,customers,Completeness,"Email, first name, and last name must not be null or blank",No records returned.,PASS,
+DQ-CUST-004,customers,Uniqueness,Customer emails should not be repeated after trimming and case normalization,No duplicate emails found.,PASS,
+DQ-REL-001,accounts,Referential Integrity,Each account should reference an existing customer,No orphan accounts found.,PASS,
+DQ-REL-003,accounts,Referential Integrity,Each account should reference an existing branch,No orphan branch references found.,PASS,
+DQ-ACC-003,accounts,Uniqueness,Account numbers should not be repeated,No duplicate account numbers found.,PASS,
+DQ-TXN-002,transactions,Referential Integrity,Each transaction should reference an existing account,No orphan transactions found.,PASS,
+DQ-TXN-003,transactions,Validity,"Transaction amounts must not be null, zero, or negative",No invalid transaction amounts found.,PASS,
+DQ-TXN-001,transactions,Profiling,Summarize transaction types and amount ranges,"deposit: 426 transactions (min 5, max 4966.43); fee: 45 (min 0.07, max 48.94); interest: 36 (min 0.07, max 49.37); withdrawal: 493 (min 1.25, max 1238.31). Total: 1000 transactions.",PROFILE,Descriptive summary; not a pass/fail test.
+DQ-CARD-003,cards,Uniqueness,Card numbers should not be repeated,5 duplicate card-number groups found.,REVIEW,Review whether duplicate card numbers are expected under the business rules.
+DQ-SO-006,standing_orders,Validity,Review standing orders with next-run dates before today,"10 standing orders with past next-run dates found: IDs 3, 8, 9, 10, 4, 6, 7, 1, 2, 5.",REVIEW,Review whether these dates are expected; the query compares against SQLite DATE('now').
+DQ-REC-001,accounts,Reconciliation,Recorded balances should match balances calculated from transactions,No balance mismatches found across 20 accounts.,PASS,"Assumes zero opening balance and complete transaction history; deposits and interest increase balances, withdrawals and fees decrease balances."
